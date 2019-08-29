@@ -1,6 +1,5 @@
 #include "glut.h"
 #include <math.h>
-#include <stdio.h>
 
 const double PI = 4 * atan(1.0);
 
@@ -215,7 +214,6 @@ void drawShell(double x, double y, double angle)
 	double y_ground = 0.1*sin(groundFrequancy * x_ground);
 	if (shell_yt < y_ground)
 	{
-		printf("shell_yt:%f y_ground:%f\n", shell_yt, y_ground);
 		shoot_cannon = false;
 		setxy = false;
 		shell_explode = true;
