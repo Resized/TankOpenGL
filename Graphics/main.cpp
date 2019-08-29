@@ -39,7 +39,7 @@ void init()
 	shell_yt = shell_y0 + shell_Vy * shell_time + cannon_angle * shell_time * shell_time;
 }
 
-void DrawWheel()
+void drawWheel()
 {
 	double alpha, teta = PI / 20;
 	double x, y;
@@ -104,7 +104,7 @@ void drawTank()
 	glTranslated(0.82, 0.15, 0);
 	glScaled(0.1, 0.1, 1);
 	glRotated(angle, 0, 0, -direction);
-	DrawWheel();
+	drawWheel();
 	glPopMatrix();
 
 	// left up wheel
@@ -112,7 +112,7 @@ void drawTank()
 	glTranslated(-0.82, 0.15, 0);
 	glScaled(0.1, 0.1, 1);
 	glRotated(angle, 0, 0, -direction);
-	DrawWheel();
+	drawWheel();
 	glPopMatrix();
 
 	//mid 1
@@ -120,7 +120,7 @@ void drawTank()
 	glTranslated(-0.4, 0.18, 0);
 	glScaled(0.07, 0.07, 1);
 	glRotated(angle, 0, 0, -direction);
-	DrawWheel();
+	drawWheel();
 	glPopMatrix();
 
 	//mid 2
@@ -128,7 +128,7 @@ void drawTank()
 	glTranslated(0.0, 0.18, 0);
 	glScaled(0.07, 0.07, 1);
 	glRotated(angle, 0, 0, -direction);
-	DrawWheel();
+	drawWheel();
 	glPopMatrix();
 
 	//mid 3
@@ -136,7 +136,7 @@ void drawTank()
 	glTranslated(0.4, 0.18, 0);
 	glScaled(0.07, 0.07, 1);
 	glRotated(angle, 0, 0, -direction);
-	DrawWheel();
+	drawWheel();
 	glPopMatrix();
 
 	glPushMatrix();
@@ -147,31 +147,31 @@ void drawTank()
 		glPushMatrix();
 		glTranslated(-3, 0, 0);
 		glRotated(angle, 0, 0, direction);
-		DrawWheel();
+		drawWheel();
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslated(-1, 0, 0);
 		glRotated(angle, 0, 0, direction);
-		DrawWheel();
+		drawWheel();
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslated(1, 0, 0);
 		glRotated(angle, 0, 0, direction);
-		DrawWheel();
+		drawWheel();
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslated(3, 0, 0);
 		glRotated(angle, 0, 0, direction);
-		DrawWheel();
+		drawWheel();
 		glPopMatrix();
 	}
 	glPopMatrix();
 }
 
-void DrawGround()
+void drawGround()
 {
 	double x, y;
 
@@ -202,7 +202,6 @@ void drawShell(double x, double y, double angle)
 {
 	if (!setxy)
 	{
-		//shell_angle = angle * PI / 180;
 		shell_angle = angle / 2 - cannon_angle * PI / 180;
 		shell_Vx = shell_force * cos(shell_angle);
 		shell_Vy = shell_force * sin(shell_angle);
@@ -210,7 +209,6 @@ void drawShell(double x, double y, double angle)
 		shell_y0 = y;
 		setxy = true;
 	}
-	double cannon_x, cannon_y;
 	shell_xt = shell_x0 - shell_Vx * shell_time;
 	shell_yt = shell_y0 - shell_Vy * shell_time - shell_acceleration * shell_time * shell_time;
 	double x_ground = shell_xt;
@@ -254,18 +252,16 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT); // clean frame buffer
 	glLoadIdentity(); // starts the previous transformations to zero
 
-	DrawGround();
+	drawGround();
 
 	// compute height of the ground
 	x = 0.6 - (angle*PI / 180)*0.03;
 	y = 0.1*sin(groundFrequancy * x);
 	beta = atan(cos(groundFrequancy * x)); // in radian
-	//printf("%f\n", beta);
-
 
 	// tank
 	glPushMatrix();
-	glTranslated(x, y + 0.052, 0); // 0.03 is the wheel radius
+	glTranslated(x, y + 0.052, 0);
 	glRotated(beta * 180 / PI / 2, 0, 0, 1);
 	glScaled(direction*0.2, 0.2, 1);
 	drawTank();
@@ -280,7 +276,6 @@ void display()
 	if (shoot_cannon)
 	{
 		glPushMatrix();
-		//drawShell(x, y, beta * 180 / PI / 2 - cannon_angle);
 		drawShell(x - 0.18 - 0.06 * sin(beta), y + 0.2 - 0.12 * sin(beta), beta);
 		glPopMatrix();
 	}
@@ -323,18 +318,9 @@ void idle()
 	glutPostRedisplay();
 }
 
-
-void mouse(int button, int state, int x, int y)
-{
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-	{
-		direction = -direction;
-	}
-}
-
 void keyboard(unsigned char key, int x, int y)
 {
-	if (key == 32) // space ascii
+	if (key == 32) // space key ascii
 	{
 		shoot_cannon = true;
 	}
@@ -346,11 +332,10 @@ void main(int argc, char* argv[])
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutInitWindowSize(600, 600);
 	glutInitWindowPosition(200, 100);
-	glutCreateWindow("First Example");
+	glutCreateWindow("Tank");
 
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
-	glutMouseFunc(mouse);
 	glutKeyboardFunc(keyboard);
 
 	init();
